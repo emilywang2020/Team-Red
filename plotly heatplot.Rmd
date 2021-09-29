@@ -1,0 +1,64 @@
+---
+title: "Heatmaps in Plotly"
+output: html_notebook
+---
+Packages installed/opened:
+  dplyr: I just opened this one in case I want to manipulate my table
+  Tidyverse: it hosts the excel importer I used that doesn't require java
+    readxl is that package
+  plotly: the guest of honor
+  
+
+
+First, we'll want to open the package that will allow you to import Excel files
+```{r}
+library(dplyr)
+library(tidyverse)
+install.packages("readxl")
+  #this is an alternative to the xlsx package that has no outside dependencies such as JAVA
+library("readxl")
+read_xlsx("TeamRed_Transposed_D10.xlsx")
+  #this is the function with which you'll select the excel file. As long as it is in your working director, it will find it.
+data = read_xlsx("TeamRed_Transposed_D10.xlsx")
+  #that file name is just too long. We'll call it data. Very creative, I know.
+```
+ A heatmap will be perfect to give us visualization of the fold changes across the various conditions.
+
+First, let's remind ourselves what our columns are.
+```{r}
+names(data) 
+  #this will remind us of what the column names are
+```
+Now that I've been reminded, I want to double check that R has correctly determined their classes and rename anything that's not right.
+```{r}
+class(data$Treatment)
+  #should be "character"
+class(data$Cytokine)
+  #should be "character"
+class("Day 10 Ratio to Day 0")
+  #should be numeric
+data=rename(data, D10="Day 10 Ratio to Day 0")
+  #That column name was too much, so now it's called D10
+
+```
+
+Now, it's time to install and load the plotly packages
+```{r}
+install.packages("plotly")                                        # Install plotly package
+library("plotly")                                                 # Load plotly package
+
+```
+The important thing to remember here is that R is either not smart or it's very tired and needs very direct instructions. Just like me. 
+We'll have to tell it which dataframe to look in and which axes will plot which column names.
+Fig= plot_ly(x = data$column_name, y = data$other_column_name, z = data$column_to_be_heatmapped, type = "heatmap")
+In this case, I want the Treatment column to be on the x axis and the Cytokine column to be on the Y. I want the D10 column which has my ratios to be my heatmap filling.
+I'm going to call this plot output Fig.
+```{r}
+Fig= plot_ly(x = data$Treatment, y = data$Cytokine, z = data$D10, type = "heatmap")
+  #set up your data
+  
+Fig
+  #Print the heatmap to the viewer
+```
+
+
