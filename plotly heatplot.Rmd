@@ -28,17 +28,19 @@ First, let's remind ourselves what our columns are.
 ```{r}
 names(data) 
   #this will remind us of what the column names are
+
 ```
 Now that I've been reminded, I want to double check that R has correctly determined their classes and rename anything that's not right.
 ```{r}
+data=rename(data, D10="Day 10 Ratio to Day 0")
+  #That column name was too much, so now it's called D10
 class(data$Treatment)
   #should be "character"
 class(data$Cytokine)
   #should be "character"
-class("Day 10 Ratio to Day 0")
+class(data$D10)
   #should be numeric
-data=rename(data, D10="Day 10 Ratio to Day 0")
-  #That column name was too much, so now it's called D10
+
 
 ```
 
@@ -49,8 +51,11 @@ library("plotly")                                                 # Load plotly 
 
 ```
 The important thing to remember here is that R is either not smart or it's very tired and needs very direct instructions. Just like me. 
+
 We'll have to tell it which dataframe to look in and which axes will plot which column names.
+
 Fig= plot_ly(x = data$column_name, y = data$other_column_name, z = data$column_to_be_heatmapped, type = "heatmap")
+
 In this case, I want the Treatment column to be on the x axis and the Cytokine column to be on the Y. I want the D10 column which has my ratios to be my heatmap filling.
 I'm going to call this plot output Fig.
 ```{r}
